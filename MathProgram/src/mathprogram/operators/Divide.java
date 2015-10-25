@@ -13,19 +13,19 @@ public class Divide implements BinaryOperator {
 
     @Override
     public float doOperation(float x, float y) {
-        if(y==0) return 1;
+       if(y==0) return 1;
         return x/y;
     }
 
     @Override
     public float doDxOperation(float x, float y) {
-        if(y==0) return 0;
+       if(y==0) return 1;
         return 1/y;
     }
 
     @Override
     public float doDyOperation(float x, float y) {
-        if(y==0) return 0;
+      if(y==0) return 1;
         return -1.0f*(x/(y*y));
     }
     
