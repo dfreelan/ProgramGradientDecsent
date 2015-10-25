@@ -18,8 +18,8 @@ public class MathProgram {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        int lines = 200;
-        int registers = 100;
+        int lines = 10;
+        int registers = 5;
         Program a = new Program(lines,registers, getUnaryFunctions(), getBinaryFunctions());
         
         float[] input = new float[registers];
@@ -28,18 +28,48 @@ public class MathProgram {
             input[i] = 1.0f;
         }
         
-        float[] output =  a.getOut(input);
-        System.out.println();
-        output =  a.getOut(output);
+        System.err.println("before");
+        float[] output =  a.getOut(input.clone());
+       
+        float[] difference = new float[registers];
         
-        FloatMath.printFloatArr(output);
+        difference[0] = output[0] - 2.0f;
+        
+        a.setupBackPropagate(difference);
+        a.applyBackProp();
+        
+        System.err.println("after");
+        
+        output = a.getOut(input.clone());
+        
+        difference[0] = output[0] - 2.0f;
+        
+        a.setupBackPropagate(difference);
+        a.applyBackProp();
+        
+        System.err.println("after2");
+        
+        output = a.getOut(input.clone());
+        
+        for(int i = 0; i<10000; i++){
+            difference[0] = 2-output[0];
+            difference[1] = 3-output[1];
+            difference[2] = 90-output[1];
+            difference[3] = -90-output[1];
+            a.setupBackPropagate(difference);
+            a.applyBackProp();
+
+            System.err.println("after3");
+
+            output = a.getOut(input.clone());
+        }
     }
     public static UnaryOperator[] getUnaryFunctions(){
-        UnaryOperator[] arr = new UnaryOperator[4];
+        UnaryOperator[] arr = new UnaryOperator[5];
         
         arr[0] = new Cos();
         arr[1] = new Sin();
-        //arr[2] = new Exp();
+        arr[4] = new Exp();
         arr[2] = new Log();
         arr[3] = new NoOp();
         
@@ -47,12 +77,12 @@ public class MathProgram {
     }
     
     public static BinaryOperator[] getBinaryFunctions(){
-        BinaryOperator[] arr = new BinaryOperator[4];
+        BinaryOperator[] arr = new BinaryOperator[3];
         
         arr[0] = new Add();
         arr[1] = new Subtract();
-        arr[2] = new Divide();
-        arr[3] = new Multiply();
+        //arr[2] = new Divide();
+        arr[2] = new Multiply();
        
         return arr;
     }
