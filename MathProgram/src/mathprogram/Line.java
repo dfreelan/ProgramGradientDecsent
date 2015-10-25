@@ -84,10 +84,10 @@ public class Line {
         return out;
     }
     public void backPropSetup(float difference, float deltaConstant){
-        calculateDOut(difference,deltaConstant);
-        calculateDUnary(difference, deltaConstant);
-        calculateDBinary(difference,deltaConstant);
-        calculateDSrc(difference,deltaConstant);
+     //   calculateDOut(difference,deltaConstant);
+     //   calculateDUnary(difference, deltaConstant);
+     //   calculateDBinary(difference,deltaConstant);
+     //   calculateDSrc(difference,deltaConstant);
     }
     
     public float[] getRandomArr(int length){
