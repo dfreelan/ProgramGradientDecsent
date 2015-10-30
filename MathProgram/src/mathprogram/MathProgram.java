@@ -51,12 +51,12 @@ public class MathProgram {
         
         output = a.getOut(input.clone());
         
-        for(int i = 0; i<100000; i++){
+        for(int i = 0; i<35000; i++){
+            
+            
+            
             difference[0] = 2-output[0];
-            difference[1] = 3-output[1];
-            difference[2] = 4-output[2];
-            difference[3] = 5-output[3];
-            difference[4] = 60-output[4];
+            
             a.setupBackPropagate(difference);
             a.applyBackProp();
 
