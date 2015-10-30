@@ -27,7 +27,7 @@ public class Line {
     
     float[] lastIn;
     float[] lastOut;
-    float alpha = .001f;
+    float alpha = .0005f;
     static Random generator = new Random();
     
     UnaryOperator[] unaryFunctions;
@@ -54,10 +54,8 @@ public class Line {
         dSrcWeights = new float[registers][registers];
         dOutWeights = new float[registers];
     }
-    public void applyBackprop(float totalError){
-        if(totalError<1.0f){
-            totalError = 1.0f;
-        }
+    public void applyBackprop(){
+        float totalError = getTotalDError(); 
         System.err.println("total error was:" + totalError);
         addTogether(unaryWeights, dUnaryWeights, alpha/totalError);
         addTogether(binaryWeights,dBinaryWeights,alpha/totalError);

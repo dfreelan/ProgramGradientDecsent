@@ -51,12 +51,20 @@ public class MathProgram {
         
         output = a.getOut(input.clone());
         
+<<<<<<< HEAD
         for(int i = 0; i<35000; i++){
             
             
             
             difference[0] = 2-output[0];
             
+=======
+        for(int i = 0; i<10000; i++){
+            difference[0] = 2-output[0];
+            difference[1] = 3-output[1];
+            difference[2] = 90-output[1];
+            difference[3] = -90-output[1];
+>>>>>>> parent of 4a59eeb... backprop appears to work! Division is the worst operator man kind ever came up with.
             a.setupBackPropagate(difference);
             a.applyBackProp();
 
@@ -82,7 +90,7 @@ public class MathProgram {
         
         arr[0] = new Add();
         arr[1] = new Subtract();
-        //arr[3] = new Divide();
+        //arr[2] = new Divide();
         arr[2] = new Multiply();
        
         return arr;

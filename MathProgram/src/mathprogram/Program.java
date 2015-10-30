@@ -31,12 +31,9 @@ class Program {
       }
     }
     public void applyBackProp(){
-        float sum = 0.0f;
+        
         for(int i = 0; i<numLines; i++){
-            sum+=lines[i].getTotalDError();
-        }
-        for(int i = 0; i<numLines; i++){
-             lines[i].applyBackprop(sum);
+             lines[i].applyBackprop();
          }
     }
     void setupBackPropagate(float[] difference){
