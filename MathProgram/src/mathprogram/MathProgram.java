@@ -52,6 +52,7 @@ public class MathProgram {
         output = a.getOut(input.clone());
         
 <<<<<<< HEAD
+<<<<<<< HEAD
         for(int i = 0; i<35000; i++){
             
             
@@ -59,11 +60,16 @@ public class MathProgram {
             difference[0] = 2-output[0];
             
 =======
+=======
+>>>>>>> parent of 4a59eeb... backprop appears to work! Division is the worst operator man kind ever came up with.
         for(int i = 0; i<10000; i++){
             difference[0] = 2-output[0];
             difference[1] = 3-output[1];
             difference[2] = 90-output[1];
             difference[3] = -90-output[1];
+<<<<<<< HEAD
+>>>>>>> parent of 4a59eeb... backprop appears to work! Division is the worst operator man kind ever came up with.
+=======
 >>>>>>> parent of 4a59eeb... backprop appears to work! Division is the worst operator man kind ever came up with.
             a.setupBackPropagate(difference);
             a.applyBackProp();
