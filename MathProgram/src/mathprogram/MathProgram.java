@@ -20,14 +20,14 @@ public class MathProgram {
     /**
      * @param args the command line arguments
      */
-    static int lines = 20;
-    static int registers = 2;
+    static int lines = 10;
+    static int registers = 5;
     static double[][] getTrainingData(int number) {
         double[][] data = new double[number][2];
         for (int i = 0; i < data.length; i++) {
-            data[i][0] = (2*generator.nextDouble());
+            data[i][0] = 1-(2*generator.nextDouble());
             double x = data[i][0];
-            data[i][1] = (double) Math.sin(x) + 1.0;//(double) (double) Math.sin(Math.sin(data[i][0] * data[i][0]));
+            data[i][1] = (double) (double) (double) x*x*x*x*x +x*x*x*x + x*x*x + x*x + x;
         }
         return data;
     }
@@ -50,7 +50,7 @@ public class MathProgram {
         double[][] trainingData = getTrainingData(20);
         output = a.getOut(input.clone());
 
-        for (int i = 0; i < 500000; i++) {
+        for (int i = 0; i < 200000; i++) {
             double totalSquareError = 0.0f;
             if(i%2000==1999){
                 //Program.alpha = Program.alpha/1.5f;
@@ -90,14 +90,14 @@ public class MathProgram {
                     a = temp;//revert
                 }
             }else {
-               Program.alpha = .0011f;
+               Program.alpha = 10000.0f;
             }
                     
           
         }
 
-        for (int i = 0; i < 500; i++) {
-            double x = (((double) i) / 500 *2);
+        for (int i = 0; i < 1000; i++) {
+            double x = (((double) i) / 500 *10);
             input[0] = x;
             output = a.getOut(input.clone());
             System.err.println(x + "," + output[0]);
@@ -112,15 +112,19 @@ public class MathProgram {
         double[] output;
         double[] difference = new double[registers];
         double totalSquareError = 0.0f;
-        for (int k = 0; k < trainingData.length; k++) {
+         for (int k = 0; k < trainingData.length; k++) {
                 double actualInput = trainingData[k][0];
 
                 input[0] = actualInput;
                 output = p.getOut(input.clone());
                 //System.err.println();
                 difference[0] = (trainingData[k][1] - output[0]);
+                
                 totalSquareError += difference[0] * difference[0];
-        }
+                
+                
+
+            }
         
         return totalSquareError;
 

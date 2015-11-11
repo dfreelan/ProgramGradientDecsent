@@ -58,13 +58,17 @@ class Program{
          }
     }
     void setupBackPropagate(double[] difference){
-        double[] deltaArr = new double[difference.length];
+        double packedInfo[][] = new double[3][difference.length];
+        packedInfo[0][0] = 1.0d/difference.length;
+        
+        //double[] deltaArr = new double[difference.length];
         //for(int i = 0; i<deltaArr.length; i++){
-            deltaArr[0] = 1.0f;
+         //   deltaArr[0] = 1.0f;
         //    deltaArr[1] = 1.0f;
         //}
+        
         for(int i = lines.length-1; i>-1; i--){
-            deltaArr = lines[i].backPropSetup(difference, deltaArr);
+            packedInfo = lines[i].backPropSetup(difference,packedInfo);
         }
     }
     double[] getOut(double[] input) {
