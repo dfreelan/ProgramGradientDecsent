@@ -10,6 +10,6 @@ package mathprogram.operators;
  * @author dfreelan
  */
 public interface UnaryOperator {
-   public float doOperation(float x);
-   public float doDxOperation(float x);
+   public double doOperation(double x);
+   public double doDxOperation(double x);
 }

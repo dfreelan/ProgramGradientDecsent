@@ -12,17 +12,17 @@ package mathprogram.operators;
 public class Subtract implements BinaryOperator {
 
     @Override
-    public float doOperation(float x, float y) {
+    public double doOperation(double x, double y) {
         return x - y;
     }
 
     @Override
-    public float doDxOperation(float x, float y) {
+    public double doDxOperation(double x, double y) {
         return 1.0f;
     }
 
     @Override
-    public float doDyOperation(float x, float y) {
+    public double doDyOperation(double x, double y) {
         return -1.0f;
     }
     

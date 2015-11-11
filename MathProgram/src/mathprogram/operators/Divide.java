@@ -12,7 +12,7 @@ package mathprogram.operators;
 public class Divide implements BinaryOperator {
 
     @Override
-    public float doOperation(float x, float y) {
+    public double doOperation(double x, double y) {
 
        if(x==0) return 1;
         return y/x;
@@ -20,7 +20,7 @@ public class Divide implements BinaryOperator {
     }
 
     @Override
-    public float doDxOperation(float x, float y) {
+    public double doDxOperation(double x, double y) {
 
        if(x==0.0f) return 0;
         return 1/x;
@@ -28,7 +28,7 @@ public class Divide implements BinaryOperator {
     }
 
     @Override
-    public float doDyOperation(float x, float y) {
+    public double doDyOperation(double x, double y) {
 
       if(x==0.0f) return 0;
         return -1.0f*(y/(x*x));

@@ -10,9 +10,9 @@ package mathprogram;
  *
  * @author dfreelan
  */
-public class FloatMath {
-    public static float[] normalize(float[] arr, float sum){
-        float total = 0;
+public class DoubleMath {
+    public static double[] normalize(double[] arr, double sum){
+        double total = 0;
         for(int i = 0; i<arr.length; i++){
             total+=arr[i];
         }
@@ -21,18 +21,18 @@ public class FloatMath {
         }
         return arr;
     }
-    public static float[] normalize(float[] arr){
+    public static double[] normalize(double[] arr){
         return normalize(arr, 1.0f);
     }
-    public static void printFloatArr(float[] arr){
+    public static void printdoubleArr(double[] arr){
         for(int i = 0; i<arr.length-1; i++){
             System.err.print(arr[i] + ",");
         }
         System.err.println(arr[arr.length-1]);
     }
-    public static void printFloatArr(float[][] arr){
+    public static void printdoubleArr(double[][] arr){
         for(int i = 0; i<arr.length; i++){
-            printFloatArr(arr[i]);
+            printdoubleArr(arr[i]);
         }
         System.err.println();
     }

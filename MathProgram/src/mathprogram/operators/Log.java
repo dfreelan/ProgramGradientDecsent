@@ -11,12 +11,12 @@ package mathprogram.operators;
  */
 public class Log implements UnaryOperator {
      @Override
-    public float doOperation(float x) {
-        return (float)Math.log(x*x)/2;
+    public double doOperation(double x) {
+        return (double)Math.log(x*x)/2;
     }
 
     @Override
-    public float doDxOperation(float x) {
+    public double doDxOperation(double x) {
         return 1.0f/x;
     }
 }

@@ -10,7 +10,7 @@ package mathprogram.operators;
  * @author dfreelan
  */
 public interface BinaryOperator {
-   public float doOperation(float x, float y);
-   public float doDxOperation(float x, float y);
-   public float doDyOperation(float x, float y);
+   public double doOperation(double x, double y);
+   public double doDxOperation(double x, double y);
+   public double doDyOperation(double x, double y);
 }

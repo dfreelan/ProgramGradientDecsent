@@ -11,13 +11,13 @@ package mathprogram.operators;
  */
 public class Exp implements UnaryOperator {
     @Override
-    public float doOperation(float x) {
-        return (float)Math.exp(x);
+    public double doOperation(double x) {
+        return (double)Math.exp(x);
     }
 
     @Override
-    public float doDxOperation(float x) {
-        return (float)Math.exp(x);
+    public double doDxOperation(double x) {
+        return (double)Math.exp(x);
     }
     
 }

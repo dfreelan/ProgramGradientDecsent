@@ -11,13 +11,13 @@ package mathprogram.operators;
  */
 public class Cos implements UnaryOperator {
      @Override
-    public float doOperation(float x) {
+    public double doOperation(double x) {
         
-        return  (float)Math.cos(x);
+        return  (double)Math.cos(x);
     }
 
     @Override
-    public float doDxOperation(float x) {
-        return -1.0f*(float)Math.sin(x);
+    public double doDxOperation(double x) {
+        return -1.0f*(double)Math.sin(x);
     }
 }

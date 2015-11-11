@@ -12,12 +12,12 @@ package mathprogram.operators;
 public class NoOp implements UnaryOperator {
 
     @Override
-    public float doOperation(float x) {
+    public double doOperation(double x) {
         return x;
     }
 
     @Override
-    public float doDxOperation(float x) {
+    public double doDxOperation(double x) {
         return 1;
     }
     

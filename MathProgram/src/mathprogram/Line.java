@@ -15,20 +15,20 @@ import mathprogram.operators.UnaryOperator;
  */
 public class Line {
 
-    float[][] unaryWeights;
-    float[][] binaryWeights;
-    float[][] srcWeights;
-    float[] outWeights;
+    double[][] unaryWeights;
+    double[][] binaryWeights;
+    double[][] srcWeights;
+    double[] outWeights;
     
-    float[][] dUnaryWeights;
-    float[][] dBinaryWeights;
-    float[][] dSrcWeights;
-    float[] dOutWeights;
+    double[][] dUnaryWeights;
+    double[][] dBinaryWeights;
+    double[][] dSrcWeights;
+    double[] dOutWeights;
 
-    float[] lastIn;
-    float[] lastOut;
+    double[] lastIn;
+    double[] lastOut;
 
-    //float alpha = .0001f;
+    //double alpha = .0001f;
 
     static Random generator = new Random();
 
@@ -51,11 +51,11 @@ public class Line {
         
         return newLine;
     }
-    public float[] copyArray(float[] arr){
+    public double[] copyArray(double[] arr){
         return arr.clone();
     }
-    public float[][] copyArray(float arr[][]){
-        float[][] newArr = new float[arr.length][];
+    public double[][] copyArray(double arr[][]){
+        double[][] newArr = new double[arr.length][];
         for(int i = 0; i<arr.length; i++){
             newArr[i] = arr[i].clone();
         }
@@ -76,10 +76,10 @@ public class Line {
     }
 
     public void initDelta() {
-        dUnaryWeights = new float[registers][unaryFunctions.length];
-        dBinaryWeights = new float[registers][binaryFunctions.length];
-        dSrcWeights = new float[registers][registers];
-        dOutWeights = new float[registers];
+        dUnaryWeights = new double[registers][unaryFunctions.length];
+        dBinaryWeights = new double[registers][binaryFunctions.length];
+        dSrcWeights = new double[registers][registers];
+        dOutWeights = new double[registers];
     }
 
     public void addInComplexity(){
@@ -89,33 +89,33 @@ public class Line {
         applyComplexity(dOutWeights, outWeights);
         
     }
-    public void applyComplexity(float arr[], float arr2[]){
+    public void applyComplexity(double arr[], double arr2[]){
         for(int i = 0; i<arr.length; i++){
-            float x = arr2[i];
+            double x = arr2[i];
            
             arr[i] += 10*x*((x-1.0f)*(2*x-1.0f));
                     
         }
     }
-    public void applyComplexity(float arr[][], float arr2[][]){
+    public void applyComplexity(double arr[][], double arr2[][]){
         for(int i = 0; i<arr.length; i++){
             applyComplexity(arr[i], arr2[i]);
         }
     }
-    public void applyBackprop(float totalError) {
+    public void applyBackprop(double totalError) {
         //addInComplexity();
         if (totalError < 1.0f) {
            // System.err.println("total error was:" + totalError);
             //totalError = 1.0f;
         }
         /*System.err.println("unary");
-        FloatMath.printFloatArr(dUnaryWeights);
+        doubleMath.printdoubleArr(dUnaryWeights);
          System.err.println("binary");
-        FloatMath.printFloatArr(dBinaryWeights);
+        doubleMath.printdoubleArr(dBinaryWeights);
          System.err.println("out");
-        FloatMath.printFloatArr(dOutWeights);
+        doubleMath.printdoubleArr(dOutWeights);
          System.err.println("src");
-        FloatMath.printFloatArr(dSrcWeights);*/
+        doubleMath.printdoubleArr(dSrcWeights);*/
         
         addTogether(unaryWeights, dUnaryWeights, Program.alpha / totalError);
         addTogether(binaryWeights, dBinaryWeights, Program.alpha / totalError);
@@ -135,19 +135,19 @@ public class Line {
         setAllTo(srcWeights, 1.0f);
     }
 
-    public void setAllTo(float[] arr, float value) {
+    public void setAllTo(double[] arr, double value) {
         for (int i = 0; i < arr.length; i++) {
             arr[i] = value;
         }
     }
 
-    public void setAllTo(float[][] arr, float value) {
+    public void setAllTo(double[][] arr, double value) {
         for (int i = 0; i < arr.length; i++) {
             setAllTo(arr[i], value);
         }
     }
-    public float getMaxDError() {
-        float max = 0.0f;
+    public double getMaxDError() {
+        double max = 0.0f;
         
         max = getMaxOf(dOutWeights,max);
         
@@ -159,8 +159,8 @@ public class Line {
         
         return max;
     }
-    public float getMaxOf(float[] arr, float maxInit){
-        float max = maxInit;
+    public double getMaxOf(double[] arr, double maxInit){
+        double max = maxInit;
         for(int i = 0; i<arr.length; i++){
             if(arr[i]>max){
                 max = arr[i];
@@ -169,15 +169,15 @@ public class Line {
         return max;
         
     }
-    public float getMaxOf(float[][] arr, float maxInit){
-        float max = maxInit;
+    public double getMaxOf(double[][] arr, double maxInit){
+        double max = maxInit;
         for(int i = 0; i<arr.length; i++){
             max = getMaxOf(arr[i],max);
         }
         return max;
     }
-    public float getTotalDError() {
-        float sum = 0.0f;
+    public double getTotalDError() {
+        double sum = 0.0f;
         sum += getSumOf(dOutWeights);
         sum += getSumOf(dUnaryWeights);
         sum += getSumOf(dSrcWeights);
@@ -185,53 +185,53 @@ public class Line {
         return sum;
     }
 
-    public float getSumOf(float[] arr) {
-        float sum = 0.0f;
-        for (float a : arr) {
+    public double getSumOf(double[] arr) {
+        double sum = 0.0f;
+        for (double a : arr) {
             sum += Math.abs(a);
         }
         return sum;
     }
 
-    public float getSumOf(float[][] arr) {
-        float sum = 0.0f;
-        for (float[] a : arr) {
+    public double getSumOf(double[][] arr) {
+        double sum = 0.0f;
+        for (double[] a : arr) {
             sum += getSumOf(a);
         }
         return sum;
     }
 
-    public void addTogether(float[] dest, float[] src, float alpha) {
+    public void addTogether(double[] dest, double[] src, double alpha) {
         for (int i = 0; i < dest.length; i++) {
             dest[i] = dest[i] + (alpha * src[i]);
         }
     }
 
-    public void addTogether(float[][] dest, float[][] src, float alpha) {
+    public void addTogether(double[][] dest, double[][] src, double alpha) {
         for (int i = 0; i < dest.length; i++) {
             addTogether(dest[i], src[i], alpha);
         }
     }
 
-    public float[] getOut(float[] in) {
+    public double[] getOut(double[] in) {
         this.lastIn = in.clone();
 
-        float[] out = new float[registers];
+        double[] out = new double[registers];
         for (int output = 0; output < out.length; output++) {
             out[output] = 0;
-            float outWeight = outWeights[output];
-            float inputK = in[output];
+            double outWeight = outWeights[output];
+            double inputK = in[output];
             for (int unary = 0; unary < unaryFunctions.length; unary++) {
-                float value = unaryWeights[output][unary] * unaryFunctions[unary].doOperation(outWeight * inputK);
+                double value = unaryWeights[output][unary] * unaryFunctions[unary].doOperation(outWeight * inputK);
 
                 out[output] += value;
                 //System.err.println("output unary" + output + " " + unary + " " + value + " " + unaryFunctions[unary].getClass().getName());
             }
 
             for (int src = 0; src < binaryWeights.length; src++) {
-                float mySrc = in[src];
+                double mySrc = in[src];
                 for (int binary = 0; binary < binaryFunctions.length; binary++) {
-                    float value = binaryWeights[output][binary] * binaryFunctions[binary].doOperation(srcWeights[output][src] * mySrc, outWeight * inputK);
+                    double value = binaryWeights[output][binary] * binaryFunctions[binary].doOperation(srcWeights[output][src] * mySrc, outWeight * inputK);
 
                     out[output] += value;
                     
@@ -246,7 +246,7 @@ public class Line {
         return out;
     }
 
-    public float[] backPropSetup(float[] difference, float[] deltaConstant) {
+    public double[] backPropSetup(double[] difference, double[] deltaConstant) {
         calculateDOut(difference, deltaConstant);
         calculateDUnary(difference, deltaConstant);
         calculateDBinary(difference, deltaConstant);
@@ -254,38 +254,38 @@ public class Line {
         return getDeltaConstant();
     }
 
-    public float[] getRandomArr(int length) {
-        float arr[] = new float[length];
+    public double[] getRandomArr(int length) {
+        double arr[] = new double[length];
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = generator.nextFloat() / 5000;
+            arr[i] = generator.nextDouble() / 5000;
         }
         return arr;
     }
 
-    public float[][] getRandomArr(int length, int length2) {
-        float arr[][] = new float[length][];
+    public double[][] getRandomArr(int length, int length2) {
+        double arr[][] = new double[length][];
         for (int i = 0; i < arr.length; i++) {
             arr[i] = getRandomArr(length2);
         }
         return arr;
     }
 
-    private void calculateDOut(float difference[], float[] deltaConstant) {
-        float tempDOut[] = new float[dOutWeights.length];
+    private void calculateDOut(double difference[], double[] deltaConstant) {
+        double tempDOut[] = new double[dOutWeights.length];
         for (int out = 0; out < dOutWeights.length; out++) {
-            float outWeight = outWeights[out];
-            float inputK = lastIn[out];
+            double outWeight = outWeights[out];
+            double inputK = lastIn[out];
 
             for (int unary = 0; unary < unaryWeights[out].length; unary++) {
                 tempDOut[out] += unaryWeights[out][unary] * unaryFunctions[unary].doDxOperation(outWeight * inputK) * inputK;
             }
 
             for (int src = 0; src < binaryWeights.length; src++) {
-                float mySrc = lastIn[src];
+                double mySrc = lastIn[src];
                 for (int binary = 0; binary < binaryFunctions.length; binary++) {
                     tempDOut[out] += binaryWeights[out][binary] * binaryFunctions[binary].doDyOperation(srcWeights[out][src] * mySrc, outWeight * inputK) * inputK;
                     if(tempDOut[out] == 0){
-                        System.err.println("hey that's zeroDOut");
+                        //System.err.println("hey that's zeroDOut");
                     }
                 }
             }
@@ -297,18 +297,18 @@ public class Line {
 
     }
 
-    public float[] getDeltaConstant() {
-        float tempDeltaConstant[] = new float[dOutWeights.length];
+    public double[] getDeltaConstant() {
+        double tempDeltaConstant[] = new double[dOutWeights.length];
         for (int out = 0; out < dOutWeights.length; out++) {
-            float outWeight = outWeights[out];
-            float inputK = lastIn[out];
+            double outWeight = outWeights[out];
+            double inputK = lastIn[out];
 
             for (int unary = 0; unary < unaryWeights[out].length; unary++) {
                 tempDeltaConstant[out] += outWeight * unaryWeights[out][unary] * unaryFunctions[unary].doDxOperation(outWeight * inputK);
             }
 
             for (int src = 0; src < binaryWeights.length; src++) {
-                float mySrc = lastIn[src];
+                double mySrc = lastIn[src];
                 for (int binary = 0; binary < binaryFunctions.length; binary++) {
                     tempDeltaConstant[out] += outWeight * binaryWeights[out][binary] * binaryFunctions[binary].doDyOperation(srcWeights[out][src] * mySrc, outWeight * inputK);
                     if( tempDeltaConstant[out]==0.0f){
@@ -322,24 +322,24 @@ public class Line {
         return tempDeltaConstant;
     }
 
-    private void calculateDBinary(float difference[], float[] deltaConstant) {
-        float tempDBinaryWeights[][] = new float[dBinaryWeights.length][dBinaryWeights[0].length];
+    private void calculateDBinary(double difference[], double[] deltaConstant) {
+        double tempDBinaryWeights[][] = new double[dBinaryWeights.length][dBinaryWeights[0].length];
         
         for (int out = 0; out < dOutWeights.length; out++) {
-            float outWeight = outWeights[out];
-            float inputK = lastIn[out];
+            double outWeight = outWeights[out];
+            double inputK = lastIn[out];
 
             for (int src = 0; src < binaryWeights.length; src++) {
-                float mySrc = lastIn[src];
+                double mySrc = lastIn[src];
                 for (int binary = 0; binary < binaryFunctions.length; binary++) {
                     tempDBinaryWeights[out][binary] += binaryFunctions[binary].doOperation(srcWeights[out][src] * mySrc, outWeight * inputK);
                     if(tempDBinaryWeights[out][binary] == 0){
-                        System.err.println("hey that's zero!");
+                        //System.err.println("hey that's zero!");
                     }
                 }
             }
             for (int a = 0; a < tempDBinaryWeights[out].length; a++) {
-                float value = tempDBinaryWeights[out][a] * difference[out] * deltaConstant[out];
+                double value = tempDBinaryWeights[out][a] * difference[out] * deltaConstant[out];
                 
                 dBinaryWeights[out][a] += tempDBinaryWeights[out][a] * difference[out] * deltaConstant[out];
                 //System.err.println(value + " im a dik");
@@ -348,14 +348,14 @@ public class Line {
 
     }
 
-    private void calculateDSrc(float difference[], float[] deltaConstant) {
-        float[][] tempDSrcWeights = new float[dSrcWeights.length][dSrcWeights[0].length];
+    private void calculateDSrc(double difference[], double[] deltaConstant) {
+        double[][] tempDSrcWeights = new double[dSrcWeights.length][dSrcWeights[0].length];
         for (int out = 0; out < dOutWeights.length; out++) {
-            float outWeight = outWeights[out];
-            float inputK = lastIn[out];
+            double outWeight = outWeights[out];
+            double inputK = lastIn[out];
 
             for (int src = 0; src < binaryWeights.length; src++) {
-                float mySrc = lastIn[src];
+                double mySrc = lastIn[src];
                 for (int binary = 0; binary < binaryFunctions.length; binary++) {
                     tempDSrcWeights[out][src] += binaryWeights[out][binary] * binaryFunctions[binary].doDxOperation(srcWeights[out][src] * mySrc, outWeight * inputK) * mySrc;
                 }
@@ -367,11 +367,11 @@ public class Line {
 
     }
 
-    private void calculateDUnary(float difference[], float[] deltaConstant) {
-        float[][] tempDUnaryWeights = new float[dUnaryWeights.length][dUnaryWeights[0].length];
+    private void calculateDUnary(double difference[], double[] deltaConstant) {
+        double[][] tempDUnaryWeights = new double[dUnaryWeights.length][dUnaryWeights[0].length];
         for (int out = 0; out < dOutWeights.length; out++) {
-            float outWeight = outWeights[out];
-            float inputK = lastIn[out];
+            double outWeight = outWeights[out];
+            double inputK = lastIn[out];
 
             for (int unary = 0; unary < unaryWeights[out].length; unary++) {
                 tempDUnaryWeights[out][unary] += unaryWeights[out][unary] * unaryFunctions[unary].doOperation(outWeight * inputK);

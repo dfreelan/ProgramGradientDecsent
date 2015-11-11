@@ -11,13 +11,13 @@ package mathprogram.operators;
  */
 public class Sin implements UnaryOperator {
     @Override
-    public float doOperation(float x) {
+    public double doOperation(double x) {
         
-        return (float)Math.sin(x);
+        return (double)Math.sin(x);
     }
 
     @Override
-    public float doDxOperation(float x) {
-        return (float)Math.cos(x);
+    public double doDxOperation(double x) {
+        return (double)Math.cos(x);
     }
 }

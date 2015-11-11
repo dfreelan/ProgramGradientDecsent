@@ -17,7 +17,7 @@ class Program{
     int registers;
     UnaryOperator[] unaryFunctions;
     BinaryOperator[] binaryFunctions;
-    static float alpha=.0001f;
+    static double alpha=.0001f;
     Line[] lines;
     public Program clone(){
         Program newProg = new Program(numLines, registers, unaryFunctions, binaryFunctions);
@@ -45,10 +45,10 @@ class Program{
     }
     public void applyBackProp(){
 
-        float max = 0.0f;
+        double max = 0.0f;
         for(int i = 0; i<numLines; i++){
             //lines[i].addInComplexity();
-            float value = lines[i].getMaxDError();
+            double value = lines[i].getMaxDError();
             if(max<value){
                 max = value;
             }
@@ -57,8 +57,8 @@ class Program{
              lines[i].applyBackprop(max);
          }
     }
-    void setupBackPropagate(float[] difference){
-        float[] deltaArr = new float[difference.length];
+    void setupBackPropagate(double[] difference){
+        double[] deltaArr = new double[difference.length];
         //for(int i = 0; i<deltaArr.length; i++){
             deltaArr[0] = 1.0f;
         //    deltaArr[1] = 1.0f;
@@ -67,14 +67,14 @@ class Program{
             deltaArr = lines[i].backPropSetup(difference, deltaArr);
         }
     }
-    float[] getOut(float[] input) {
+    double[] getOut(double[] input) {
         input = input.clone();
         //System.err.println("question:");
-        //FloatMath.printFloatArr(input);
+        //doubleMath.printdoubleArr(input);
         //System.err.println("answer:");
         for(int i = 0; i<numLines; i++){
             input = lines[i].getOut(input);
-            //FloatMath.printFloatArr(input);
+            //doubleMath.printdoubleArr(input);
         }
         
         return input;
