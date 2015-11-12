@@ -20,7 +20,7 @@ class Program{
     BinaryOperator[] binaryFunctions;
     static double alpha=.0001f;
     Line[] lines;
-    double dropProbability = 1.0;
+    double dropProbability = 0;
     Random generator = new Random();
     public Program clone(){
         Program newProg = new Program(numLines, registers, unaryFunctions, binaryFunctions);
@@ -49,11 +49,11 @@ class Program{
     public void applyBackProp(){
 
         double max = 0.0f;
-        //dropProbability = generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble();
+        dropProbability = generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble();
 
         for(int i = 0; i<numLines; i++){
             //lines[i].addInComplexity();
-            //lines[i].applyMask(dropProbability);
+            lines[i].applyMask(dropProbability);
             double value = lines[i].getMaxDError();
             if(max<value){
                 max = value;
@@ -66,7 +66,7 @@ class Program{
     }
     void setupBackPropagate(double[] difference){
         double packedInfo[][] = new double[3][difference.length];
-        packedInfo[0][0] = .0001d;
+        packedInfo[0][0] = 1.0d;
         
         //double[] deltaArr = new double[difference.length];
         //for(int i = 0; i<deltaArr.length; i++){

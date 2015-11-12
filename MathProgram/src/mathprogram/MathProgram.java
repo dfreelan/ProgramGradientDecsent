@@ -20,14 +20,14 @@ public class MathProgram {
     /**
      * @param args the command line arguments
      */
-    static int lines = 30;
-    static int registers = 5;
+    static int lines = 10;
+    static int registers = 4;
     static double[][] getTrainingData(int number) {
         double[][] data = new double[number][2];
         for (int i = 0; i < data.length; i++) {
-            data[i][0] = (2*generator.nextDouble());
+            data[i][0] = 1-(2*generator.nextDouble());
             double x = data[i][0];
-            data[i][1] = (double) (double) (double)Math.log(x+1) + Math.log(x*x + 1.0);;;
+            data[i][1] = (double) x*x*x*x*x + x*x*x*x + x*x*x + x*x + x;
         }
         return data;
     }
@@ -49,10 +49,10 @@ public class MathProgram {
 
         double[][] trainingData = getTrainingData(20);
         output = a.getOut(input.clone());
-        Program.alpha = .001;
+        Program.alpha = 1;
         for (int i = 0; i < 50000; i++) {
             double totalSquareError = 0.0f;
-            if(i%10000==9999){
+            if(i%5000==4999){
                 Program.alpha = Program.alpha/10f;
             }
             for (int k = 0; k < trainingData.length; k++) {
@@ -86,11 +86,12 @@ public class MathProgram {
                     }
                          
                 }else{
-                   
+                   // Program.alpha /=1.01f;
+                    System.err.println("err would have been"  + newErr);
                     a = temp;//revert
                 }
             }else {
-               //Program.alpha = .01;
+              // Program.alpha = .01;
             }
                     
           
@@ -131,12 +132,12 @@ public class MathProgram {
     }
 
     public static UnaryOperator[] getUnaryFunctions() {
-        UnaryOperator[] arr = new UnaryOperator[5];
+        UnaryOperator[] arr = new UnaryOperator[4];
 
         arr[3] = new Cos();
         arr[1] = new Sin();
-        arr[2] = new Exp();
-        arr[4] = new Log();
+       // arr[2] = new Exp();
+        arr[2] = new Log();
         arr[0] = new NoOp();
 
         return arr;

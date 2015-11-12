@@ -116,9 +116,10 @@ public class Line {
     public void applyBackprop(double totalError) {
         //addInComplexity();
         if (totalError < 1.0f) {
-            // System.err.println("total error was:" + totalError);
-            //totalError = 1.0f;
+             System.err.println("total error was:" + totalError);
+            totalError = 1.0f;
         }
+        /*System.err.println("alpha over err " + Program.alpha/totalError);
         System.err.println("unary");
          DoubleMath.printdoubleArr(dUnaryWeights);
          System.err.println("binary");
@@ -127,7 +128,7 @@ public class Line {
          DoubleMath.printdoubleArr(dOutWeights);
          System.err.println("src");
          DoubleMath.printdoubleArr(dSrcWeights);
-         System.err.println("total error:"  + totalError);
+         System.err.println("total error:"  + totalError);*/
         addTogether(unaryWeights, dUnaryWeights, Program.alpha / totalError);
         addTogether(binaryWeights, dBinaryWeights, Program.alpha / totalError);
         addTogether(srcWeights, dSrcWeights, Program.alpha / totalError);
@@ -149,7 +150,7 @@ public class Line {
          DoubleMath.printdoubleArr(dOutWeights);
          System.err.println("src");
          DoubleMath.printdoubleArr(dSrcWeights);*/
-         
+        
         addTogether(unaryWeights, dUnaryWeights, Program.alpha / totalError, totalError);
         addTogether(binaryWeights, dBinaryWeights, Program.alpha / totalError, totalError);
         addTogether(srcWeights, dSrcWeights, Program.alpha / totalError, totalError);
@@ -422,7 +423,7 @@ public class Line {
         for (int si = 0; si < newSi.length; si++) {
             newSi[si] = prevR[0] * getDeltaX(si, 0);
             for (int s = 0; s < newSi.length; s++) {
-                newSi[si] += (prevS[s] + prevSi[s]) * getDeltaX(s, si);
+                newSi[si] += (prevS[s] + prevSi[s]) * getDeltaX(si, s);
             }
         }
 
@@ -437,9 +438,9 @@ public class Line {
         max = this.getMaxOf(newSi, max);
         max*=100;
         
-       // DoubleMath.divAllBy(newR, max);
-       // DoubleMath.divAllBy(newS, max);
-       // DoubleMath.divAllBy(newSi, max);
+        //DoubleMath.divAllBy(newR, max);
+        //DoubleMath.divAllBy(newS, max);
+        //DoubleMath.divAllBy(newSi, max);
         
         packedInfo[0] = newR;
         packedInfo[1] = newS;
