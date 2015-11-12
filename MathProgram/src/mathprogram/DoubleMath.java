@@ -36,4 +36,17 @@ public class DoubleMath {
         }
         System.err.println();
     }
+    public static void divAllBy(double[][] arr, double value){
+        for(int i = 0; i<arr.length; i++){
+            divAllBy(arr[i],value);
+        }
+        
+    }
+    
+    public static void divAllBy(double[] arr, double value){
+        for(int i = 0; i<arr.length; i++){
+            arr[i] = arr[i]/value;
+        }
+        
+    }
 }

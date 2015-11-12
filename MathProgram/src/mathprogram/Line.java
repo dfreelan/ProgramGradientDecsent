@@ -119,15 +119,15 @@ public class Line {
             // System.err.println("total error was:" + totalError);
             //totalError = 1.0f;
         }
-        /*System.err.println("unary");
-         doubleMath.printdoubleArr(dUnaryWeights);
+        System.err.println("unary");
+         DoubleMath.printdoubleArr(dUnaryWeights);
          System.err.println("binary");
-         doubleMath.printdoubleArr(dBinaryWeights);
+         DoubleMath.printdoubleArr(dBinaryWeights);
          System.err.println("out");
-         doubleMath.printdoubleArr(dOutWeights);
+         DoubleMath.printdoubleArr(dOutWeights);
          System.err.println("src");
-         doubleMath.printdoubleArr(dSrcWeights);*/
-
+         DoubleMath.printdoubleArr(dSrcWeights);
+         System.err.println("total error:"  + totalError);
         addTogether(unaryWeights, dUnaryWeights, Program.alpha / totalError);
         addTogether(binaryWeights, dBinaryWeights, Program.alpha / totalError);
         addTogether(srcWeights, dSrcWeights, Program.alpha / totalError);
@@ -135,7 +135,78 @@ public class Line {
 
         initDelta();
     }
+    public void applyBackpropMaxOnly(double totalError) {
+        //addInComplexity();
+        if (totalError < 1.0f) {
+            // System.err.println("total error was:" + totalError);
+            //totalError = 1.0f;
+        }
+        /*System.err.println("unary");
+         DoubleMath.printdoubleArr(dUnaryWeights);
+         System.err.println("binary");
+         DoubleMath.printdoubleArr(dBinaryWeights);
+         System.err.println("out");
+         DoubleMath.printdoubleArr(dOutWeights);
+         System.err.println("src");
+         DoubleMath.printdoubleArr(dSrcWeights);*/
+         
+        addTogether(unaryWeights, dUnaryWeights, Program.alpha / totalError, totalError);
+        addTogether(binaryWeights, dBinaryWeights, Program.alpha / totalError, totalError);
+        addTogether(srcWeights, dSrcWeights, Program.alpha / totalError, totalError);
+        addTogether(outWeights, dOutWeights, Program.alpha / totalError,totalError);
 
+        initDelta();
+    }
+    public void applyBackpropRandomN(double totalError, int n) {
+        //addInComplexity();
+        if (totalError < 1.0f) {
+            // System.err.println("total error was:" + totalError);
+            //totalError = 1.0f;
+        }
+        /*System.err.println("unary");
+         DoubleMath.printdoubleArr(dUnaryWeights);
+         System.err.println("binary");
+         DoubleMath.printdoubleArr(dBinaryWeights);
+         System.err.println("out");
+         DoubleMath.printdoubleArr(dOutWeights);
+         System.err.println("src");
+         DoubleMath.printdoubleArr(dSrcWeights);*/
+        for(int i = 0; i<n; i++){
+            double manipulatedArr[];
+            double deltaArr[];
+            int index = 0;
+            switch(generator.nextInt(4)){
+                case 0:
+                    index = generator.nextInt(binaryWeights.length);
+                    manipulatedArr = binaryWeights[index]; 
+                    deltaArr = dBinaryWeights[index];
+                    break;
+                case 1:
+                    index = generator.nextInt(unaryWeights.length);
+                    manipulatedArr = unaryWeights[index]; 
+                    deltaArr = dUnaryWeights[index];
+                    break;
+                case 2:
+                    index = generator.nextInt(srcWeights.length);
+                    manipulatedArr = srcWeights[index]; 
+                    deltaArr = dSrcWeights[index];
+                    break;
+                case 3:
+                    manipulatedArr = outWeights; 
+                    deltaArr = dOutWeights;
+                    break;
+                default:
+                    manipulatedArr = null;
+                    deltaArr = null;
+
+            }
+
+            index = generator.nextInt(manipulatedArr.length);
+
+            manipulatedArr[index] = manipulatedArr[index] + (Program.alpha/totalError*deltaArr[index]);
+        }
+        initDelta();
+    }
     void setToDefault() {
         setAllTo(unaryWeights, 0.0f);
         for (int i = 0; i < unaryWeights.length; i++) {
@@ -175,8 +246,8 @@ public class Line {
     public double getMaxOf(double[] arr, double maxInit) {
         double max = maxInit;
         for (int i = 0; i < arr.length; i++) {
-            if (arr[i] > max) {
-                max = arr[i];
+            if (Math.abs(arr[i]) > max) {
+                max = Math.abs(arr[i]);
             }
         }
         return max;
@@ -218,7 +289,7 @@ public class Line {
 
     public void addTogether(double[] dest, double[] src, double alpha) {
         for (int i = 0; i < dest.length; i++) {
-            if(generator.nextInt(100) ==1)
+            
                 dest[i] = dest[i] + (alpha * src[i]);
         }
     }
@@ -226,6 +297,24 @@ public class Line {
     public void addTogether(double[][] dest, double[][] src, double alpha) {
         for (int i = 0; i < dest.length; i++) {
             addTogether(dest[i], src[i], alpha);
+        }
+    }
+    
+    public void addTogether(double[] dest, double[] src, double alpha, double value) {
+        for (int i = 0; i < dest.length; i++) {
+            if(Math.abs(src[i]) == value){
+              System.err.println("this happened");
+              dest[i] = dest[i] + (alpha * src[i]);
+            }
+            //System.err.println("desti" + src[i]);
+           //System.err.println("value " + value);
+        }
+    }
+
+    public void addTogether(double[][] dest, double[][] src, double alpha, double value) {
+        
+        for (int i = 0; i < dest.length; i++) {
+            addTogether(dest[i], src[i], alpha,value);
         }
     }
 
@@ -326,11 +415,12 @@ public class Line {
         double newSi[] = new double[prevSi.length];
 
         newR[0] = prevR[0] * (getDeltaU(0) + getDeltaY(0));
+        
         for (int s = 0; s < newS.length; s++) {
             newS[s] = (prevS[s] + prevSi[s]) * (getDeltaU(s) + getDeltaY(s));
         }
         for (int si = 0; si < newSi.length; si++) {
-            newSi[si] = prevR[0] * getDeltaX(0, si);
+            newSi[si] = prevR[0] * getDeltaX(si, 0);
             for (int s = 0; s < newSi.length; s++) {
                 newSi[si] += (prevS[s] + prevSi[s]) * getDeltaX(s, si);
             }
@@ -340,12 +430,40 @@ public class Line {
         //prevS = newS;
         //prevSi = newSi;
         double[][] packedInfo = new double[3][];
+        //System.err.println("newSi is");
+        //DoubleMath.printdoubleArr(newSi);
+        double max = this.getMaxOf(newR, 0);
+        max = this.getMaxOf(newS, max);
+        max = this.getMaxOf(newSi, max);
+        max*=100;
+        
+       // DoubleMath.divAllBy(newR, max);
+       // DoubleMath.divAllBy(newS, max);
+       // DoubleMath.divAllBy(newSi, max);
+        
         packedInfo[0] = newR;
         packedInfo[1] = newS;
         packedInfo[2] = newSi;
         return packedInfo;
     }
-
+    public void applyMask(double prob){
+        zeroWithProb(dOutWeights,prob);
+        zeroWithProb(dUnaryWeights,prob);
+        zeroWithProb(dSrcWeights,prob);
+        zeroWithProb(dBinaryWeights,prob);
+    }
+    private void zeroWithProb(double[] arr, double prob){
+        for(int i = 0; i<arr.length; i++){
+            if(generator.nextDouble() > prob){
+                arr[i] = 0;
+            }
+        }
+    }
+    private void zeroWithProb(double[][] arr, double prob){
+        for(int i = 0; i<arr.length; i++){
+            zeroWithProb(arr[i],prob);
+        }
+    }
     private void calculateDBinary(double difference[]) {
         double tempDBinaryWeights[][] = new double[dBinaryWeights.length][dBinaryWeights[0].length];
             

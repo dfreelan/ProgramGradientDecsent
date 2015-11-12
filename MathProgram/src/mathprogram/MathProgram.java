@@ -20,14 +20,14 @@ public class MathProgram {
     /**
      * @param args the command line arguments
      */
-    static int lines = 10;
+    static int lines = 30;
     static int registers = 5;
     static double[][] getTrainingData(int number) {
         double[][] data = new double[number][2];
         for (int i = 0; i < data.length; i++) {
-            data[i][0] = 1-(2*generator.nextDouble());
+            data[i][0] = (2*generator.nextDouble());
             double x = data[i][0];
-            data[i][1] = (double) (double) (double) x*x*x*x*x +x*x*x*x + x*x*x + x*x + x;
+            data[i][1] = (double) (double) (double)Math.log(x+1) + Math.log(x*x + 1.0);;;
         }
         return data;
     }
@@ -49,11 +49,11 @@ public class MathProgram {
 
         double[][] trainingData = getTrainingData(20);
         output = a.getOut(input.clone());
-
-        for (int i = 0; i < 200000; i++) {
+        Program.alpha = .001;
+        for (int i = 0; i < 50000; i++) {
             double totalSquareError = 0.0f;
-            if(i%2000==1999){
-                //Program.alpha = Program.alpha/1.5f;
+            if(i%10000==9999){
+                Program.alpha = Program.alpha/10f;
             }
             for (int k = 0; k < trainingData.length; k++) {
                 double actualInput = trainingData[k][0];
@@ -73,9 +73,9 @@ public class MathProgram {
             a.applyBackProp();
             System.err.println(Program.alpha);
             double newErr = getSquareError(a,trainingData,input.clone());
-            if(newErr>totalSquareError || Double.isNaN(newErr)){
+            if(newErr>=totalSquareError || Double.isNaN(newErr)){
                 
-                Program.alpha = Program.alpha/1.1f;
+                //Program.alpha = Program.alpha/1.1f;
                 if(Program.alpha < .0000000001f){
                     
                     if(Double.isNaN(newErr)){
@@ -90,7 +90,7 @@ public class MathProgram {
                     a = temp;//revert
                 }
             }else {
-               Program.alpha = 10000.0f;
+               //Program.alpha = .01;
             }
                     
           

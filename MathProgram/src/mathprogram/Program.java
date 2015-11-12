@@ -5,6 +5,7 @@
  */
 package mathprogram;
 
+import java.util.Random;
 import mathprogram.operators.BinaryOperator;
 import mathprogram.operators.UnaryOperator;
 
@@ -19,6 +20,8 @@ class Program{
     BinaryOperator[] binaryFunctions;
     static double alpha=.0001f;
     Line[] lines;
+    double dropProbability = 1.0;
+    Random generator = new Random();
     public Program clone(){
         Program newProg = new Program(numLines, registers, unaryFunctions, binaryFunctions);
         for(int i = 0; i<newProg.lines.length; i++){
@@ -46,20 +49,24 @@ class Program{
     public void applyBackProp(){
 
         double max = 0.0f;
+        //dropProbability = generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble();
+
         for(int i = 0; i<numLines; i++){
             //lines[i].addInComplexity();
+            //lines[i].applyMask(dropProbability);
             double value = lines[i].getMaxDError();
             if(max<value){
                 max = value;
             }
         }
         for(int i = 0; i<numLines; i++){
+            //System.err.println("line number " + i);
              lines[i].applyBackprop(max);
          }
     }
     void setupBackPropagate(double[] difference){
         double packedInfo[][] = new double[3][difference.length];
-        packedInfo[0][0] = 1.0d/difference.length;
+        packedInfo[0][0] = .0001d;
         
         //double[] deltaArr = new double[difference.length];
         //for(int i = 0; i<deltaArr.length; i++){
@@ -68,17 +75,17 @@ class Program{
         //}
         
         for(int i = lines.length-1; i>-1; i--){
-            packedInfo = lines[i].backPropSetup(difference,packedInfo);
+            packedInfo = lines[i].backPropSetup(difference.clone(),packedInfo);
         }
     }
     double[] getOut(double[] input) {
         input = input.clone();
         //System.err.println("question:");
-        //doubleMath.printdoubleArr(input);
+        //DoubleMath.printdoubleArr(input);
         //System.err.println("answer:");
         for(int i = 0; i<numLines; i++){
             input = lines[i].getOut(input);
-            //doubleMath.printdoubleArr(input);
+            //DoubleMath.printdoubleArr(input);
         }
         
         return input;
