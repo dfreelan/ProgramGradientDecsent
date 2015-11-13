@@ -20,7 +20,7 @@ class Program{
     BinaryOperator[] binaryFunctions;
     static double alpha=.0001f;
     Line[] lines;
-    double dropProbability = 0;
+    double dropProbability = .005;
     Random generator = new Random();
     public Program clone(){
         Program newProg = new Program(numLines, registers, unaryFunctions, binaryFunctions);
@@ -49,7 +49,7 @@ class Program{
     public void applyBackProp(){
 
         double max = 0.0f;
-        dropProbability = generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble();
+        //dropProbability = generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble()*generator.nextDouble();
 
         for(int i = 0; i<numLines; i++){
             //lines[i].addInComplexity();

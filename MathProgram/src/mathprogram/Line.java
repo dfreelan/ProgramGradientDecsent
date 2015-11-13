@@ -116,7 +116,7 @@ public class Line {
     public void applyBackprop(double totalError) {
         //addInComplexity();
         if (totalError < 1.0f) {
-             System.err.println("total error was:" + totalError);
+            // System.err.println("total error was:" + totalError);
             totalError = 1.0f;
         }
         /*System.err.println("alpha over err " + Program.alpha/totalError);
@@ -436,11 +436,11 @@ public class Line {
         double max = this.getMaxOf(newR, 0);
         max = this.getMaxOf(newS, max);
         max = this.getMaxOf(newSi, max);
-        max*=100;
+        max*=10;
         
-        //DoubleMath.divAllBy(newR, max);
-        //DoubleMath.divAllBy(newS, max);
-        //DoubleMath.divAllBy(newSi, max);
+        DoubleMath.divAllBy(newR, max);
+        DoubleMath.divAllBy(newS, max);
+        DoubleMath.divAllBy(newSi, max);
         
         packedInfo[0] = newR;
         packedInfo[1] = newS;
@@ -556,23 +556,24 @@ public class Line {
         for (int binary = 0; binary < binaryFunctions.length; binary++) {
             sum += binaryWeights[dest][binary] * binaryFunctions[binary].doDxOperation(srcWeights[dest][src] * lastIn[src], outWeights[dest] * lastIn[dest]);
         }
-        sum *= lastIn[src];
+        sum *= srcWeights[dest][src];
         return sum;
     }
 
     private double getDeltaY(int src, int dest) {
         double sum = 0;
         for (int binary = 0; binary < binaryFunctions.length; binary++) {
-            sum += binaryWeights[dest][binary] * binaryFunctions[binary].doDyOperation(srcWeights[dest][src] * lastIn[src], outWeights[dest] * lastIn[dest]) * lastIn[dest];
+            sum += binaryWeights[dest][binary] * binaryFunctions[binary].doDyOperation(srcWeights[dest][src] * lastIn[src], outWeights[dest] * lastIn[dest])  ;
            
         }
+        sum*=outWeights[dest];
         return sum;
     }
 
     private double getDeltaU(int dest) {
         double sum = 0;
         for (int unary = 0; unary < unaryWeights[dest].length; unary++) {
-            sum += unaryFunctions[unary].doDxOperation(outWeights[dest] * lastIn[dest]);
+            sum += unaryWeights[dest][unary] * unaryFunctions[unary].doDxOperation(outWeights[dest] * lastIn[dest]);
         }
         sum *= outWeights[dest];
         return sum;

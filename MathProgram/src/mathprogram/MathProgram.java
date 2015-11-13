@@ -5,6 +5,10 @@
  */
 package mathprogram;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Random;
 import mathprogram.operators.*;
 import mathprogram.operators.UnaryOperator;
@@ -20,20 +24,24 @@ public class MathProgram {
     /**
      * @param args the command line arguments
      */
-    static int lines = 10;
+    static int lines = 1;
     static int registers = 4;
     static double[][] getTrainingData(int number) {
         double[][] data = new double[number][2];
         for (int i = 0; i < data.length; i++) {
             data[i][0] = 1-(2*generator.nextDouble());
             double x = data[i][0];
-            data[i][1] = (double) x*x*x*x*x + x*x*x*x + x*x*x + x*x + x;
+            data[i][1] = (double) x*x*x*x*x + x*x*x*x + x*x*x + x*x +x;
         }
         return data;
     }
 
     public static void main(String[] args) {
         
+        for(int theLines = 1; theLines<120; theLines++){
+            for(int theRegisters = 1; theRegisters<15; theRegisters++){
+        lines = theLines;
+        registers = theRegisters;
         Program a = new Program(lines, registers, getUnaryFunctions(), getBinaryFunctions());
 
         double[] input = new double[registers];
@@ -49,12 +57,13 @@ public class MathProgram {
 
         double[][] trainingData = getTrainingData(20);
         output = a.getOut(input.clone());
-        Program.alpha = 1;
-        for (int i = 0; i < 50000; i++) {
+        Program.alpha = .1;
+        for (int i = 0; i < 25000; i++) {
             double totalSquareError = 0.0f;
-            if(i%5000==4999){
-                Program.alpha = Program.alpha/10f;
+            if(i==5000){
+                Program.alpha = Program.alpha/10;
             }
+           
             for (int k = 0; k < trainingData.length; k++) {
                 double actualInput = trainingData[k][0];
 
@@ -69,13 +78,14 @@ public class MathProgram {
 
             }
             System.err.println(i + " total square err n: " + totalSquareError);
+            
             Program temp = a.clone();
             a.applyBackProp();
             System.err.println(Program.alpha);
             double newErr = getSquareError(a,trainingData,input.clone());
             if(newErr>=totalSquareError || Double.isNaN(newErr)){
                 
-                //Program.alpha = Program.alpha/1.1f;
+                //Program.alpha = Program.alpha/1.01f;
                 if(Program.alpha < .0000000001f){
                     
                     if(Double.isNaN(newErr)){
@@ -91,7 +101,7 @@ public class MathProgram {
                     a = temp;//revert
                 }
             }else {
-              // Program.alpha = .01;
+              // Program.alpha *=1.1;
             }
                     
           
@@ -107,8 +117,22 @@ public class MathProgram {
         input[0] = 25;
         output = a.getOut(input.clone());
         System.err.println(output[0]);
+            outToFile("reg,lines err" +registers + "," + lines + " " +getSquareError(a,trainingData,input.clone()));
+           
+            }
+        }
     }
-
+    //Taken from stack overflow, because i'm lazy
+    //http://stackoverflow.com/questions/1625234/how-to-append-text-to-an-existing-file-in-java
+    static void outToFile(String stuff){
+        try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("/home/dfreelan/Desktop/bunchoflinesandregistersAndConstantAlpha.01but5000.1.txt", true)))) {
+            out.println(stuff);
+         
+        }catch (IOException e) {
+            e.printStackTrace();;
+            //exception handling left as an exercise for the reader
+        }
+    }
     public static double getSquareError(Program p, double[][] trainingData, double[] input) {
         double[] output;
         double[] difference = new double[registers];
@@ -132,11 +156,11 @@ public class MathProgram {
     }
 
     public static UnaryOperator[] getUnaryFunctions() {
-        UnaryOperator[] arr = new UnaryOperator[4];
+        UnaryOperator[] arr = new UnaryOperator[5];
 
         arr[3] = new Cos();
         arr[1] = new Sin();
-       // arr[2] = new Exp();
+        arr[4] = new Exp();
         arr[2] = new Log();
         arr[0] = new NoOp();
 
