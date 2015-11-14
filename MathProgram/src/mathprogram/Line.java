@@ -34,8 +34,8 @@ public class Line {
     UnaryOperator[] unaryFunctions;
     BinaryOperator[] binaryFunctions;
     double prevR[] = new double[1];
-    double prevS[];
-    double prevSi[];
+    double prevS[] = new double[1];
+    double prevSi[] = new double[1];
     int registers;
 
     public Line clone() {
@@ -386,9 +386,9 @@ public class Line {
             double outWeight = outWeights[out];
             double inputK = lastIn[out];
             double prevR = 0;
-            if(out==0){
+            //if(out==0){
                 prevR = this.prevR[0];
-            }
+            //}
             for (int unary = 0; unary < unaryWeights[out].length; unary++) {
                 tempDOut[out] += unaryWeights[out][unary] * unaryFunctions[unary].doDxOperation(outWeight * inputK) * inputK;
             }
@@ -470,9 +470,9 @@ public class Line {
             
         for (int out = 0; out < dOutWeights.length; out++) {
             double prevR = 0;
-            if(out==0){
+          //  if(out==0){
                 prevR = this.prevR[0];
-            }
+           //}
             double outWeight = outWeights[out];
             double inputK = lastIn[out];
 
@@ -496,9 +496,9 @@ public class Line {
         double[][] tempDSrcWeights = new double[dSrcWeights.length][dSrcWeights[0].length];
         for (int out = 0; out < dOutWeights.length; out++) {
             double prevR = 0;
-            if(out==0){
+        //    if(out==0){
                 prevR = this.prevR[0];
-            }
+        //    }
             double outWeight = outWeights[out];
             double inputK = lastIn[out];
 
@@ -519,9 +519,9 @@ public class Line {
         double[][] tempDUnaryWeights = new double[dUnaryWeights.length][dUnaryWeights[0].length];
         for (int out = 0; out < dOutWeights.length; out++) {
             double prevR = 0;
-            if(out==0){
+        //    if(out==0){
                 prevR = this.prevR[0];
-            }
+        //    }
             double outWeight = outWeights[out];
             double inputK = lastIn[out];
 
@@ -578,5 +578,42 @@ public class Line {
         sum *= outWeights[dest];
         return sum;
     }
+/*
+    
+    double[][] unaryWeights;
+    double[][] binaryWeights;
+    double[][] srcWeights;
+    double[] outWeights;
 
+    double[][] dUnaryWeights;
+    double[][] dBinaryWeights;
+    double[][] dSrcWeights;
+    double[] dOutWeights;
+    */
+    
+    double[][][] getAllWeights(){
+        double[][][] allWeights = new double[4][][];
+        
+        allWeights[0] = unaryWeights;
+        allWeights[1] = binaryWeights;
+        allWeights[2] = srcWeights;
+        double arr[][] = new double[1][];
+        arr[0] = outWeights;
+        allWeights[3] = arr;
+        
+        return allWeights;
+    }
+    
+    double[][][] getAllDeltaWeights(){
+        double[][][] allWeights = new double[4][][];
+        
+        allWeights[0] = dUnaryWeights;
+        allWeights[1] = dBinaryWeights;
+        allWeights[2] = dSrcWeights;
+        double arr[][] = new double[1][];
+        arr[0] = dOutWeights;
+        allWeights[3] = arr;
+        
+        return allWeights;
+    }
 }

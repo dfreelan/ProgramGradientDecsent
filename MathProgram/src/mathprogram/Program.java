@@ -20,7 +20,7 @@ class Program{
     BinaryOperator[] binaryFunctions;
     static double alpha=.0001f;
     Line[] lines;
-    double dropProbability = .005;
+    double dropProbability = .5;
     Random generator = new Random();
     public Program clone(){
         Program newProg = new Program(numLines, registers, unaryFunctions, binaryFunctions);
@@ -53,7 +53,7 @@ class Program{
 
         for(int i = 0; i<numLines; i++){
             //lines[i].addInComplexity();
-            lines[i].applyMask(dropProbability);
+            //lines[i].applyMask(dropProbability);
             double value = lines[i].getMaxDError();
             if(max<value){
                 max = value;
@@ -61,8 +61,9 @@ class Program{
         }
         for(int i = 0; i<numLines; i++){
             //System.err.println("line number " + i);
-             lines[i].applyBackprop(max);
-         }
+             //lines[i].applyBackprop(max);
+            lines[i].applyBackpropRandomN(max, 1);
+        }
     }
     void setupBackPropagate(double[] difference){
         double packedInfo[][] = new double[3][difference.length];
@@ -90,5 +91,7 @@ class Program{
         
         return input;
     }
+    
+  
     
 }
